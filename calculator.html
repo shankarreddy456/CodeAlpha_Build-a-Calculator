@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculator</title>
+  <style>
+    body {
+      background: #e0f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #004d40;
+      font-size: 2.5rem;
+    }
+
+    .calculator {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 320px;
+    }
+
+    .calc-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #00796b;
+    }
+
+    .display {
+      background: #f1f1f1;
+      padding: 15px;
+      font-size: 2rem;
+      text-align: right;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #00838f;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #006064;
+    }
+
+    .operator {
+      background-color: #f57f17;
+    }
+
+    .clear {
+      background-color: #d32f2f;
+    }
+
+    .equal {
+      background-color: #388e3c;
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculator</h1>
+
+  <div class="calculator">
+    <div class="calc-title">Simple Calculator</div>
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="appendOperator('(')">(</button>
+      <button onclick="appendOperator(')')">)</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="appendOperator('-')">−</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="appendNumber('.')">.</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+
+    function appendNumber(number) {
+      if (display.innerText === '0') {
+        display.innerText = number;
+      } else {
+        display.innerText += number;
+      }
+    }
+
+    function appendOperator(operator) {
+      const lastChar = display.innerText.slice(-1);
+      if ('+-*/'.includes(lastChar)) return;
+      display.innerText += operator;
+    }
+
+    function clearDisplay() {
+      display.innerText = '0';
+    }
+
+    function calculateResult() {
+      try {
+        display.innerText = eval(display.innerText.replace(/÷/g, '/').replace(/×/g, '*'));
+      } catch (e) {
+        display.innerText = 'Error';
+      }
+    }
+
+    // Bonus: Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (!isNaN(e.key) || ".()+-*/".includes(e.key)) {
+        if (display.innerText === '0') {
+          display.innerText = e.key;
+        } else {
+          display.innerText += e.key;
+        }
+      } else if (e.key === 'Enter') {
+        calculateResult();
+      } else if (e.key === 'Backspace') {
+        display.innerText = display.innerText.slice(0, -1) || '0';
+      } else if (e.key.toLowerCase() === 'c') {
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>
